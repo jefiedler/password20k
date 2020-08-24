@@ -1,17 +1,3 @@
-// Password input in console with board moduls
-
-// const readline = require('readline').createInterface({
-//     input: process.stdin,
-//     output: process.stdout
-//   })
-  
-//   readline.question(`What's your password?`, password => {
-//     console.log(`Your password is ${password}!`)
-//     readline.close()
-//   })
-
-
-
 const inquirer = require("inquirer");
 const fs = require("fs").promises;
 
