@@ -6,13 +6,14 @@ const CHOICE_SET = "Set a password";
 const startQuestions = [
     {
         type: "password",
-        name: "password",
+        name: "masterPassword",
         message: "What's our master password?"
     },
     {
-        type: "input",
-        name: "key",
-        message: "What's our name?",
+        type: "list",
+        name: "action",
+        message: "What do you want to do?",
+        choices: [CHOICE_GET, CHOICE_SET],
     },
 ];
 
