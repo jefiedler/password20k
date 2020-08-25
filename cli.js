@@ -1,5 +1,5 @@
 const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet } = require("./src/questions");
-const { readPassword } = require("./src/password");
+const { readPassword, writePassword } = require("./src/password");
 
 async function main (){
     const {masterPassword, action} = await askQuestionStart();
@@ -17,7 +17,8 @@ async function main (){
         } else if (action === CHOICE_SET) {
             console.log("Now Set a password");
             const {key, password} = await askQuestionSet();
-            console.log(`New Password: ${key} = ${password}`);
+            await writePassword(key, password);
+            console.log(`New Password is set`);
         }
     } else {
         console.log("Master Password is incorrect!");
