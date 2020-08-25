@@ -9,7 +9,7 @@ async function readPasswords(){
 
 async function writePasswords(passwords){
     const newPasswordJson = JSON.stringify(passwords, null, 2);
-    await fs.writeFile("./passwords.json", newPasswordJson);
+    await fs.writeFile("./password.json", newPasswordJson);
 }
 
 async function readPassword(key) {
@@ -19,9 +19,9 @@ async function readPassword(key) {
 }
 
 async function writePassword(key, value) {
-    const passwords = await readPasswords();
-    passwords[key] = value;
-    await writePasswords(passwords);
+    const password = await readPasswords();
+    password[key] = value;
+    await writePasswords(password);
 }
 
 exports.readPassword = readPassword;
