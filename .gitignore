@@ -106,3 +106,4 @@ dist
 .password.json
 .vscode
 .launch.json
+password.json
