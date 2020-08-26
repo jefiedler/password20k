@@ -7,21 +7,21 @@ async function readPasswords(){
     return passwords;
 }
 
-async function writePasswords(passwords){
-    const newPasswordJson = JSON.stringify(passwords, null, 2);
-    await fs.writeFile("./password.json", newPasswordJson);
-}
 
-async function readPassword(key, masterPassword) {
-    const passwords = await readPasswords();
-    const password = decrypt(passwords[key], masterPassword);
+async function readPassword(key, masterPassword, database) {
+    const collection = database.collection("password20k");
+    const encryptPassword = await collection.findOne({ name: key });
+    const password = decrypt(encryptPassword.value, masterPassword);
     return password;
 }
 
-async function writePassword(key, value, masterPassword) {
-    const password = await readPasswords();
-    password[key] = encrypt(value, masterPassword);
-    await writePasswords(password);
+async function writePassword(key, value, masterPassword, database) {
+    const collection = database.collection("password20k");
+    const encryptPassword = encrypt(value, masterPassword);
+    await collection.insertOne({
+        name: key,
+        value: encryptPassword,
+    })
 }
 
 async function readMasterPassword(){
