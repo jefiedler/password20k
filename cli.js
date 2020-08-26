@@ -1,9 +1,11 @@
 const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet } = require("./src/questions");
-const { readPassword, writePassword } = require("./src/password");
+const { readPassword, writePassword, readMasterPassword } = require("./src/password");
 
 async function main (){
     const {masterPassword, action} = await askQuestionStart();
-    if (masterPassword === "123"){
+    const originalMasterPassword = await readMasterPassword();
+
+    if (masterPassword === originalMasterPassword){
         console.log("Password is correct!");
         if (action === CHOICE_GET) {
             console.log("Now Get a password");
