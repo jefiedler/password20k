@@ -1,15 +1,29 @@
-const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet } = require("./src/questions");
-const { readPassword, writePassword } = require("./src/password");
+const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet, askForMasterPassword } = require("./src/questions");
+const { readPassword, writePassword, readMasterPassword, writeMasterPassword } = require("./src/password");
+const { createHash, verifyHash } = require("./src/crypto");
 
 async function main (){
+    const originalMasterPassword = await readMasterPassword();
+    if (!originalMasterPassword){
+        const {newMasterPassword} = await askForMasterPassword();
+        const hashMasterPassword = await createHash(newMasterPassword);
+        await writeMasterPassword(hashMasterPassword);
+        console.log("Master Password set!");
+        return;
+    }
+
     const {masterPassword, action} = await askQuestionStart();
-    if (masterPassword === "123"){
-        console.log("Password is correct!");
+
+    if (!verifyHash(masterPassword, originalMasterPassword)) {
+        console.log("Master Password is incorrect!");
+        return;
+    }
+    console.log("Password is correct!");
         if (action === CHOICE_GET) {
             console.log("Now Get a password");
             const {key} = await askQuestionGet();
             try {
-                const password = await readPassword(key);
+                const password = await readPassword(key, masterPassword);
                 console.log(`Your ${key} password is ${password}`);
             } catch (error) {
                 console.error("Somthing went wrong");
@@ -17,12 +31,9 @@ async function main (){
         } else if (action === CHOICE_SET) {
             console.log("Now Set a password");
             const {key, password} = await askQuestionSet();
-            await writePassword(key, password);
+            await writePassword(key, password, masterPassword);
             console.log(`New Password is set`);
         }
-    } else {
-        console.log("Master Password is incorrect!");
-    }
 }
 main();
 

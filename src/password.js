@@ -1,4 +1,4 @@
-const { async } = require("rxjs");
+const { encrypt, decrypt } = require("./crypto");
 const fs = require("fs").promises;
 
 async function readPasswords(){
@@ -12,17 +12,32 @@ async function writePasswords(passwords){
     await fs.writeFile("./password.json", newPasswordJson);
 }
 
-async function readPassword(key) {
+async function readPassword(key, masterPassword) {
     const passwords = await readPasswords();
-    const password = passwords[key];
+    const password = decrypt(passwords[key], masterPassword);
     return password;
 }
 
-async function writePassword(key, value) {
+async function writePassword(key, value, masterPassword) {
     const password = await readPasswords();
-    password[key] = value;
+    password[key] = encrypt(value, masterPassword);
     await writePasswords(password);
+}
+
+async function readMasterPassword(){
+    try {
+    const masterPassword = await fs.readFile("./masterPassword", "utf-8");
+    return masterPassword;
+    } catch (error) {
+        return null;
+    }
+}
+
+async function writeMasterPassword(masterPassword) {
+    await fs.writeFile("./masterPassword", masterPassword);
 }
 
 exports.readPassword = readPassword;
 exports.writePassword = writePassword;
+exports.readMasterPassword = readMasterPassword;
+exports.writeMasterPassword = writeMasterPassword;

@@ -38,6 +38,14 @@ const questionsSet = [
     },
 ];
 
+const questionsNewMasterPassword = [
+    {
+        type: "password",
+        name: "newMasterPassword",
+        message: "Pleas enter your new master password",
+    },
+];
+
 function askQuestionStart () {
     return inquirer.prompt(startQuestions);
 }
@@ -50,8 +58,13 @@ function askQuestionSet () {
     return inquirer.prompt(questionsSet);
 }
 
+function askForMasterPassword() {
+    return inquirer.prompt(questionsNewMasterPassword);
+}
+
 exports.askQuestionStart = askQuestionStart;
 exports.askQuestionGet = askQuestionGet;
 exports.askQuestionSet = askQuestionSet;
+exports.askForMasterPassword = askForMasterPassword;
 exports.CHOICE_GET = CHOICE_GET;
 exports.CHOICE_SET = CHOICE_SET;
