@@ -1,12 +1,24 @@
-const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet } = require("./src/questions");
-const { readPassword, writePassword, readMasterPassword } = require("./src/password");
+const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet, askForMasterPassword } = require("./src/questions");
+const { readPassword, writePassword, readMasterPassword, writeMasterPassword } = require("./src/password");
+const { createHash, verifyHash } = require("./src/crypto");
 
 async function main (){
-    const {masterPassword, action} = await askQuestionStart();
     const originalMasterPassword = await readMasterPassword();
+    if (!originalMasterPassword){
+        const {newMasterPassword} = await askForMasterPassword();
+        const hashMasterPassword = await createHash(newMasterPassword);
+        await writeMasterPassword(hashMasterPassword);
+        console.log("Master Password set!");
+        return;
+    }
 
-    if (masterPassword === originalMasterPassword){
-        console.log("Password is correct!");
+    const {masterPassword, action} = await askQuestionStart();
+
+    if (await !verifyHash(masterPassword, originalMasterPassword)) {
+        console.log("Master Password is incorrect!");
+        return;
+    }
+    console.log("Password is correct!");
         if (action === CHOICE_GET) {
             console.log("Now Get a password");
             const {key} = await askQuestionGet();
@@ -22,9 +34,6 @@ async function main (){
             await writePassword(key, password, masterPassword);
             console.log(`New Password is set`);
         }
-    } else {
-        console.log("Master Password is incorrect!");
-    }
 }
 main();
 
