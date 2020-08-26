@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jefiedler/password20k#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "inquirer": "^7.3.3"
   },
   "devDependencies": {}
