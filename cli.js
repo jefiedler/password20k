@@ -14,7 +14,7 @@ async function main (){
 
     const {masterPassword, action} = await askQuestionStart();
 
-    if (await !verifyHash(masterPassword, originalMasterPassword)) {
+    if (!verifyHash(masterPassword, originalMasterPassword)) {
         console.log("Master Password is incorrect!");
         return;
     }
