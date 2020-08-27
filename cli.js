@@ -3,15 +3,13 @@ const { readPassword, writePassword, readMasterPassword, writeMasterPassword } =
 const { createHash, verifyHash } = require("./src/crypto");
 const { MongoClient } = require("mongodb");
 
-const uri = "mongodb+srv://jefiedler:clep9nair!gaff5RACK@cluster0.jobwz.mongodb.net?retryWrites=true&w=majority";
-
-const client = new MongoClient(uri);
+const client = new MongoClient(process.env.MONGO_URL);
 
 
 async function main (){
     try{
         await client.connect();
-        const database = client.db("password20k");
+        const database = client.db(process.env.MONGO_DB);
 
         const originalMasterPassword = await readMasterPassword();
         if (!originalMasterPassword){
