@@ -10,6 +10,11 @@ const app = express();
 const port = 3000;
 app.use(bodyParser.json());
 
+app.use((res, req, next) => {
+    console.log(`Request ${req.methode} on ${req.url}`)
+    next();
+})
+
 
 async function server(){
     //try {
