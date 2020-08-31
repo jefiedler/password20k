@@ -1,5 +1,6 @@
 const express = require("express");
 const { readPassword } = require("../src/password");
+const jwt = require("jsonwebtoken");
 
 function createReadPassword(masterPassword, database){
     const router = express.Router();

@@ -22,7 +22,6 @@ function createUserLoginRoutes(database){
             console.error("Somthing went wrong", error);
             res.status(500).send(error.massage)
         }
-
     });
     return router;
 }

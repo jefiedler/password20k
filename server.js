@@ -7,6 +7,7 @@ const { response } = require('express');
 const createReadPassword = require('./routes/createReadPasswordRoutes');
 const createPostPasswordRoutes = require('./routes/createPostPasswordRoutes');
 const createUserLoginRoutes = require('./routes/createUserLoginRoutes');
+const cookieParser = require("cookie-parser");
 
 
 
@@ -14,6 +15,7 @@ const client = new MongoClient(process.env.MONGO_URI, { useUnifiedTopology: true
 const app = express();
 const port = 3000;
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use((res, req, next) => {
     console.log(`Request ${req.methode} on ${req.url}`)
