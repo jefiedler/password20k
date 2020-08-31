@@ -7,6 +7,11 @@ function createReadPassword(masterPassword, database){
     router.get("/:passwordName", async (req, res) => {
         try {
             const{passwordName} = req.params;
+            
+            const {authToken} = req.cookies;
+            const {userName} = jwt.verify(authToken, process.env.JWT_TOKEN_SECRET);
+            console.log(`Allow access to ${userName}`);
+
             const password = await readPassword(passwordName, masterPassword, database);
             if (!password) {
                 res.status(404).send(`Password ${passwordName} not found`);

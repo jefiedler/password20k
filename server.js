@@ -6,6 +6,7 @@ const { readPassword, writePassword } = require('./src/password');
 const { response } = require('express');
 const createReadPassword = require('./routes/createReadPasswordRoutes');
 const createPostPasswordRoutes = require('./routes/createPostPasswordRoutes');
+const createUserLoginRoutes = require('./routes/createUserLoginRoutes');
 
 
 
@@ -29,7 +30,9 @@ async function server(){
         app.use("/api/passwords", createReadPassword(masterPassword, database));
 
         app.use("/api/passwords", createPostPasswordRoutes(masterPassword, database));
-        
+
+        app.use("/api/password", createUserLoginRoutes(database));
+
         app.listen(port, () => {
             console.log(`Ready! App is listening on http://localhost:${port}`)
         });
