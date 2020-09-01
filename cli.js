@@ -1,15 +1,16 @@
+require('dotenv').config();
 const { askQuestionStart, CHOICE_GET, askQuestionGet, CHOICE_SET, askQuestionSet, askForMasterPassword } = require("./src/questions");
 const { readPassword, writePassword, readMasterPassword, writeMasterPassword } = require("./src/password");
 const { createHash, verifyHash } = require("./src/crypto");
 const { MongoClient } = require("mongodb");
 
-const client = new MongoClient(process.env.MONGO_URL);
+const client = new MongoClient(process.env.MONGO_URI);
 
 
 async function main (){
     try{
         await client.connect();
-        const database = client.db(process.env.MONGO_DB);
+        const database = client.db(process.env.MONGO_DB_NAME);
 
         const originalMasterPassword = await readMasterPassword();
         if (!originalMasterPassword){
