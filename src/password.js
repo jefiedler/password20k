@@ -1,14 +1,6 @@
 const { encrypt, decrypt } = require("./crypto");
 const fs = require("fs").promises;
 
-async function readPasswords(){
-    const passwordJson = await fs.readFile("./password.json", "utf-8");
-    const passwords = JSON.parse(passwordJson);
-    return passwords;
-
-}
-
-
 async function readPassword(key, masterPassword, database) {
     const collection = database.collection("password20k");
     const encryptPassword = await collection.findOne({ name: key });
@@ -42,7 +34,27 @@ async function writeMasterPassword(masterPassword) {
     await fs.writeFile("./masterPassword", masterPassword);
 }
 
+async function patchPasswords(name, value, database,){
+    const passwordCollection = database.collection("password20k");
+    await passwordCollection.updateOne(
+        {name: name},
+        {
+            $set: {
+              name: name,
+              value: value,
+            },
+          }
+    );
+}
+
+async function deletePasswords(name, database){
+    const passwordCollection = database.collection("password20k");
+    await collection.deleteOne({name: name});
+}
+
 exports.readPassword = readPassword;
 exports.writePassword = writePassword;
 exports.readMasterPassword = readMasterPassword;
 exports.writeMasterPassword = writeMasterPassword;
+exports.patchPasswords = patchPasswords;
+exports.deletePasswords = deletePasswords;
