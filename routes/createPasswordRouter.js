@@ -2,6 +2,7 @@ const express = require("express");
 const { writePassword } = require("../src/password");
 const { readPassword } = require("../src/password");
 const jwt = require("jsonwebtoken");
+const { encrypt } = require("../src/crypto");
 
 function createPasswordRouter(masterPassword, database){
     const router = express.Router();
@@ -36,8 +37,21 @@ function createPasswordRouter(masterPassword, database){
     
     router.patch("/:name", async (req, res) => {
         try {
-            const { name} = req.params;
-            
+            const {name} = req.params;
+            const { name: key, value: newValue} = req.body;
+
+            const existingPassword = await readPassword(name, database)
+            if (!existingPassword) {
+                res.status(404).send("Password doesn't exist");
+                return ;
+            }
+
+            const passwordCollection = database.collection("password20k");
+            await passwordCollection.updateOne({name: name}, {$set: {
+                name: key || name,
+                value: newValue ? encrypt(newValue, masterPassword) : existingPassword
+            }}); 
+
         } catch{
             console.error("Somthing went wrong", error);
             res.status(500).send(error.massage)
