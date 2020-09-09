@@ -12,7 +12,7 @@ const createPasswordRouter = require('./routes/createPasswordRouter');
 
 const client = new MongoClient(process.env.MONGO_URI, { useUnifiedTopology: true });
 const app = express();
-const port = 3000;
+const port = 3001;
 app.use(bodyParser.json());
 app.use(cookieParser());
 
